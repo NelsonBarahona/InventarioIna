@@ -62,7 +62,7 @@
                                 <h2 style="color: #A2D9CE;" class="fs-4">Departamento de Informática</h2>
 
                                     <p>
-                                        <font color="white">
+                                        <font color="black">
                                         Inventario de equipos de computo contabilizados en la institución de Tegucigalpa.
                                     </font>
                                 </p>
