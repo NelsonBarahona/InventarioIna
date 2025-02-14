@@ -81,18 +81,12 @@
                                         </button>
                                     </div>
                                 </div>
-                                <!-- Mensaje de ayuda para la contraseña -->
-                                <div id="passwordHelpBlock" class="form-text">Tu contraseña debe tener entre 8 y 20 caracteres, contener letras y números, y no debe contener espacios, caracteres especiales ni emoji.</div>
-                            </div>
-
+                               <br>
                             <!-- Botones de inicio de sesión y recuperación de contraseña -->
                             <div class="d-flex justify-content-around align-items-center mb-4">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">INICIAR SESION</button>
-                                    <a href="" class="btn btn-link">¿Olvidaste tu contraseña?</a>
-                                    <br>
-                                     <br>
-                                    <center><a button type="submit" class="btn btn-warning" href="{{url('/')}}">Ir al Home</a></center>
+                                     <a button type="submit" class="btn btn-warning" href="{{url('/')}}">Ir al Home</a></center>
                                 </div>
                             </div>
                         </form>
