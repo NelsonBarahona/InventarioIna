@@ -46,23 +46,34 @@
     justify-content: center;
     align-items: center;
 }
+.slider_img-box {
+    width: 100%;
+    max-width: 400px;  /* Tamaño máximo */
+    text-align: center;  /* Centra la imagen */
+}
+
+.slider_img-box img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
 
 
     </style>
 <body>
-    <section class="slider_section position-relative">
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-4 offset-md-2">
-                                <div class="slider_detail-box">
+<section class="slider_section position-relative">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="slider_detail-box">
                                 <h1 class="text-warning fw-bold">Instituto Nacional Agrario</h1>
                                 <h2 style="color: #A2D9CE;" class="fs-4">Departamento de Informática</h2>
 
-                                    <p>
-                                        <font color="white">
+                                <p>
+                                    <font color="white">
                                         Inventario de equipos de computo contabilizados en la institución de Tegucigalpa.
                                     </font>
                                 </p>
@@ -74,10 +85,8 @@
                                 </div>
                             </div>
                             <div class="col-md-4 offset-md-1">
-                                <div class="slider_img-box">
-                                    <img src="images/logo.png" height="435px" width="320px"
-
-                                        />
+    <div class="slider_img-box">
+        <img src="images/logo.png" alt="Logo">
                                 </div>
                             </div>
                         </div>
