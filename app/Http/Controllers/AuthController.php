@@ -29,8 +29,8 @@ class AuthController extends Controller
             // Almacenar datos en la sesión
             $request->session()->put('usuario', $usuario);
 
-            // Redirigir al dashboard
-            return redirect()->route('dashboard');
+            // Redirigir al inventario
+            return redirect()->route('inventario');
         }
 
         // Si las credenciales son incorrectas, mostrar mensaje de error
@@ -44,14 +44,15 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function dashboard(Request $request)
+    public function inventario(Request $request)
     {
         // Verificar si hay usuario autenticado en sesión
         if ($request->session()->has('usuario')) {
-            return view('dashboard');
+            return view('inventario');
         }
 
         // Si no hay sesión, redirigir al login
         return redirect()->route('login');
     }
+   
 }

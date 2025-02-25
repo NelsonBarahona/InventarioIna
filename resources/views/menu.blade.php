@@ -125,20 +125,11 @@
                 <div class="btn-hamburger"></div>
             </div>
         </div>
-
-        <div id="menu-items">
-            <div class="item">
-                <a href="{{ url('/dashboard') }}">
-                    <div class="icon"><img src="{{ asset('vendor/adminlte/dist/img/inicio.svg') }}" alt="Inicio"></div>
-                    <div class="title"><span>INICIO</span></div>
-                </a>
-            </div>
-
-            <div class="item separator"></div>
+        
 
             <div class="item">
                 <a href="#" onclick="confirmLogout()">
-                    <div class="icon"><img src="{{ asset('vendor/adminlte/dist/img/logout.svg') }}" alt="Cerrar Sesión"></div>
+                    <div class="icon"><img src="images/logout.svg" alt="Cerrar Sesión"></div>
                     <div class="title"><span>CERRAR SESIÓN</span></div>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

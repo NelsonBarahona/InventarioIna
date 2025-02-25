@@ -85,7 +85,7 @@
                             <!-- Botones de inicio de sesión y recuperación de contraseña -->
                             <div class="d-flex justify-content-around align-items-center mb-4">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">INICIAR SESION</button>
+                                    <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
                                      <a button type="submit" class="btn btn-warning" href="{{url('/')}}">Ir al Home</a></center>
                                 </div>
                             </div>
@@ -156,22 +156,6 @@ function validateInput(input) {
     }
 </script>
 
-@if(session('verificado'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Cuenta verificada',
-            text: 'Se verificó su cuenta. Por favor, vuelva a iniciar sesión.',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Redirigir a la página de inicio de sesión
-                window.location.href = "{{ route('login') }}";
-            }
-        });
-    </script>
-@endif
 
 <script>
     // Obtener el elemento de entrada

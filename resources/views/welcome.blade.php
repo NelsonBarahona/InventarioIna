@@ -74,7 +74,7 @@
 
                                 <p>
                                     <font color="white">
-                                        Inventario de equipos de computo contabilizados en la institución de Tegucigalpa.
+                                        Inventario de equipos de computo contabilizados en la Institucion.
                                     </font>
                                 </p>
                                     <div class="btn-box">
