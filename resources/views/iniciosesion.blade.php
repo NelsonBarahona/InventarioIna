@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <!-- Bootstrap CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -34,6 +34,15 @@
 .custom-popup-message {
     margin-top: 10px;
     color: #1e7e34; /* Color verde más oscuro */
+}
+body {
+    background: url('images/hero1.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 93vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
 </head>
@@ -82,11 +91,12 @@
                                     </div>
                                 </div>
                                <br>
+                               
                             <!-- Botones de inicio de sesión y recuperación de contraseña -->
                             <div class="d-flex justify-content-around align-items-center mb-4">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
-                                     <a button type="submit" class="btn btn-warning" href="{{url('/')}}">Ir al Home</a></center>
+                                    <button type="submit" class="btn btn-primary"><strong>Iniciar Sesion</strong></button>
+                                     <a button type="submit" class="btn btn-warning" href="{{url('/')}}"><strong>Ir al Home</strong></a></center>
                                 </div>
                             </div>
                         </form>

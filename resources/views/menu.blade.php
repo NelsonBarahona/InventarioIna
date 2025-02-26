@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Mi Aplicación')</title>
@@ -13,6 +14,8 @@
     
     <style>
         :root {
+            
+            --bgcolor: #87CEEB;
             --width: 250px;
             --padding: 7px;
             --bgcolor: rgb(200, 200, 200);
@@ -34,9 +37,9 @@
         .body-expanded {
             margin-left: var(--width);
         }
-
+       
         #sidebar {
-            background-color: var(--bgcolor);
+            background-color: #87CEEB !important;
             color: var(--textcolor);
             position: fixed;
             left: 0;
@@ -130,7 +133,7 @@
             <div class="item">
                 <a href="#" onclick="confirmLogout()">
                     <div class="icon"><img src="images/logout.svg" alt="Cerrar Sesión"></div>
-                    <div class="title"><span>CERRAR SESIÓN</span></div>
+                    <div class="title"><span><font color="black">CERRAR SESIÓN</font></span></div>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
@@ -156,12 +159,21 @@
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: "¿Realmente quieres cerrar sesión?",
-                icon: 'question',
+                imageUrl: 'images/logo.png',
+                imageWidth: 100, 
+                imageHeight: 100, 
+                imageAlt: 'Logo', 
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#87CEEB',
                 cancelButtonColor: '#ffc107',
                 confirmButtonText: 'Sí, cerrar sesión',
-                cancelButtonText: 'Cancelar'
+                cancelButtonText: 'Cancelar',
+                didOpen: () => {
+        document.querySelector('.swal2-confirm').style.color = 'black';
+        document.querySelector('.swal2-confirm').style.fontWeight = 'bold';
+        document.querySelector('.swal2-cancel').style.color = 'black';
+        document.querySelector('.swal2-cancel').style.fontWeight = 'bold';
+    }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('logout-form').submit();

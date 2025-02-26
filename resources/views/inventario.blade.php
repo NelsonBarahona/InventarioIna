@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 @extends('menu')
-@section('title', 'Inicio')
+@section('title', 'Inventario')
 @section('content')
-<head>
+<head>  
 <meta charset="UTF-8">
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
@@ -15,19 +16,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+<style> 
+       body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
 
         .container {
-            max-width: 1000px; /* Ajusta el ancho */
-            margin: auto;
-            padding: 20px;
-            text-align: center;
-        }
+    max-width: 1000px; /* Limitar el ancho del contenedor */
+    margin: 0 auto; /* Asegurar que el contenedor esté centrado */
+    padding: 20px;
+    text-align: center;
+}
 
         h1 {
             text-align: center;
@@ -65,22 +68,36 @@
 
         /* Centrar la tabla */
         .table-container {
-            display: flex;
-            justify-content: center;
-        }
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1000px; /* Limitar el ancho máximo del contenedor */
+    margin: auto;
+}
 
-        table {
-            width: 90%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            text-align: center;
+
+table {
+    width: 100%; /* Asegúrate de que la tabla ocupe el 100% del contenedor */
+    max-width: 100%; /* Limitar el ancho máximo de la tabla */
+    border-collapse: collapse;
+    table-layout: fixed;  /* Hace que las columnas tengan un tamaño fijo */
+    width: 100%;  
+    text-align: center;
+    margin-top: 20px; /* Establece un margen superior pequeño */
+    margin-bottom: 20px; /* Establece un margen inferior pequeño */
+
+}
+        .table-primary {
+    background-color: #87CEEB !important; 
+    border-color: #87CEEB 
         }
 
         table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
+    border: 1px solid #ddd;
+    padding: 8px;
+    word-wrap: break-word;  /* Esto evitará que el texto largo se desborde */
+    max-width: 150px; /* Limitar el ancho máximo de cada celda */
+}
         .modal-dialog {
             max-width: 30%;
         }
@@ -112,6 +129,21 @@
             border-radius: 8px;
             overflow: hidden;
         }
+        .btn-azul-cielo {
+    background-color: #87CEEB !important; /* Azul cielo claro */
+    border-color: #87CEEB !important;
+    color: black !important; /* Texto en blanco para mejor contraste */
+}
+
+.btn-warning{
+color: black !important;
+}
+
+.btn-azul-cielo:hover {
+    background-color: #6CB6D9 !important; /* Un tono más oscuro al pasar el mouse */
+    border-color: #6CB6D9 !important;
+}
+
 
         .card img {
             width: 100%;
@@ -149,8 +181,8 @@
         <div class="search-container">
             <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" required oninput="validateInput(this)" maxlength="30" minlength="30"> 
             <div class="button-container">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Agregar</button>
-            <button class="btn btn-warning" id="generarReporte">Generar Reporte e Imprimir</button>
+            <button type="button" class="btn btn-azul-cielo" data-bs-toggle="modal" data-bs-target="#registerModal"><strong>Agregar</button></strong>
+            <button class="btn btn-warning" id="generarReporte"><strong>Generar Reporte</strong></button>
                 </div>
             <div class="col-sm-4">
             </div>
@@ -171,13 +203,14 @@
             {{ session('success') }}
         </div>
     @endif
-    
-    <div id="tablaImprimir">
-            <table class="table table-success table-striped">
-                <thead>
+
+    <div class="table-container">
+        
+        <table class="table table-bordered border-primary">
+            <thead class="table-primary">
                     <tr>
-                        <th>Código Equipo</th>
-                        <th>Tipo Equipo</th>
+                        <th>Código</th>
+                        <th>Tipo</th>
                         <th>Marca/Modelo</th>
                         <th>Ficha</th>
                         <th>Inventario</th>
@@ -205,9 +238,11 @@
         <td>{{ $inventario->OBSERVACIONES }}</td>
         <td>{{ $inventario->SERVICE_TAG }}</td>
         <td>          
-        <button type="button" class="btn btn-primary btn-sm mx-auto" data-bs-toggle="modal" data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
-                <i class="fas fa-pencil-alt"></i>
-            </button>
+        <button type="button" class="btn btn-azul-cielo btn-sm mx-auto" data-bs-toggle="modal" data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
+    <i class="fas fa-pencil-alt"></i>
+</button>
+<br>
+<br>
             <button class="delete btn btn-warning btn-sm mx-auto" data-inventario-id="{{ $inventario->ID_EQUIPO }}">
                 <i class="fa-solid fa-trash"></i>
             </button>
@@ -216,6 +251,10 @@
     @endforeach
 </tbody>
             </table>
+            </div>
+            <div class="d-flex justify-content-center">
+            {{ $inventarios->links('pagination::bootstrap-4') }}
+</div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

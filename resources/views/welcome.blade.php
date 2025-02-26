@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+<link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -22,10 +23,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </head>
 <style>
-        
-
-        
-
         .navbar {
             display: flex;
             align-items: center;
@@ -70,16 +67,16 @@
                         <div class="col-md-6">
                             <div class="slider_detail-box">
                                 <h1 class="text-warning fw-bold">Instituto Nacional Agrario</h1>
-                                <h2 style="color: #A2D9CE;" class="fs-4">Departamento de Informática</h2>
+                                <h2 style="color: #A2D9CE;" class="fs-4"><strong>Departamento de Informática</strong></h2>
 
                                 <p>
                                     <font color="white">
-                                        Inventario de equipos de computo contabilizados en la Institucion.
+                                        <strong>Inventario de equipos de computo contabilizados en la Institucion.</strong>
                                     </font>
                                 </p>
                                     <div class="btn-box">
                                         <a href="/login" class="btn btn-primary">
-                                            Ir al Login 
+                                            <strong>Ir al Login </strong>
                                         </a>
                                     </div>
                                 </div>
