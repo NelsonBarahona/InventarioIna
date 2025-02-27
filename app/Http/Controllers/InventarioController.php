@@ -11,7 +11,6 @@ class InventarioController extends Controller
     public function index(Request $request)
     {
         // Obtener todos los registros del inventario
-        $inventarios = Inventario::all();
         $inventarios = Inventario::paginate(10); // Muestra 10 registros por página
 
         return view('inventario', compact('inventarios'));

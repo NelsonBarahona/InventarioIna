@@ -27,6 +27,7 @@ class Inventario extends Model
         'RAM',
         'OBSERVACIONES',
         'SERVICE_TAG',
+        'ESTADO_ACTUAL',
     ];
 
    

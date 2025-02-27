@@ -177,6 +177,7 @@ color: black !important;
 <div style="margin-left: -250px;">
 <h1><strong>Inventario de Equipos de Cómputo</strong></h1>
     <div class="container">
+        
         <!-- Contenedor de búsqueda y botones -->
         <div class="search-container">
             <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" required oninput="validateInput(this)" maxlength="30" minlength="30"> 
@@ -204,59 +205,100 @@ color: black !important;
         </div>
     @endif
 
+      <!-- Contador de registros -->
+    <div class="d-flex justify-content-center my-3">
+        <strong><h5>Mostrando {{ $inventarios->firstItem() }}–{{ $inventarios->lastItem() }} de {{ $inventarios->total() }} resultados</strong></h5>
+    </div>
+
+    <!-- Tabla de inventario -->
     <div class="table-container">
-        
-        <table class="table table-bordered border-primary">
+        <table class="table table-bordered border-primary" id="inventarioTable">
             <thead class="table-primary">
-                    <tr>
-                        <th>Código</th>
-                        <th>Tipo</th>
-                        <th>Marca/Modelo</th>
-                        <th>Ficha</th>
-                        <th>Inventario</th>
-                        <th>Oficina</th>
-                        <th>Estado</th>
-                        <th>Disco Duro</th>
-                        <th>Ram</th>
-                        <th>Observaciones</th>
-                        <th>Service Tag</th>
-                        <th class="text-center acciones-ajustadas">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-    @foreach($inventarios as $inventario)
-    <tr>
-        <td>{{ $inventario->ID_EQUIPO }}</td>
-        <td>{{ $inventario->TIPO_EQUIPO }}</td>
-        <td>{{ $inventario->MARCA_MODELO }}</td>
-        <td>{{ $inventario->FICHA }}</td>
-        <td>{{ $inventario->INVENTARIO }}</td>
-        <td>{{ $inventario->OFICINA }}</td>
-        <td>{{ $inventario->ESTADO }}</td>
-        <td>{{ $inventario->DISCO_DURO }}</td>
-        <td>{{ $inventario->RAM }}</td>
-        <td>{{ $inventario->OBSERVACIONES }}</td>
-        <td>{{ $inventario->SERVICE_TAG }}</td>
-        <td>          
-        <button type="button" class="btn btn-azul-cielo btn-sm mx-auto" data-bs-toggle="modal" data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
-    <i class="fas fa-pencil-alt"></i>
-</button>
-<br>
-<br>
-            <button class="delete btn btn-warning btn-sm mx-auto" data-inventario-id="{{ $inventario->ID_EQUIPO }}">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
-            </table>
-            </div>
+            <tr>
+                <th>Código</th>
+                <th>Tipo</th>
+                <th>Marca/Modelo</th>
+                <th>Ficha</th>
+                <th>Inventario</th>
+                <th>Oficina</th>
+                <th>Estado</th>
+                <th>Disco Duro</th>
+                <th>Ram</th>
+                <th>Observaciones</th>
+                <th>Service Tag</th>
+                <th>Estado Actual</th>
+                <th class="text-center acciones-ajustadas">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($inventarios as $inventario)
+                <tr>
+                    <td>{{ $inventario->ID_EQUIPO }}</td>
+                    <td>{{ $inventario->TIPO_EQUIPO }}</td>
+                    <td>{{ $inventario->MARCA_MODELO }}</td>
+                    <td>{{ $inventario->FICHA }}</td>
+                    <td>{{ $inventario->INVENTARIO }}</td>
+                    <td>{{ $inventario->OFICINA }}</td>
+                    <td>{{ $inventario->ESTADO }}</td>
+                    <td>{{ $inventario->DISCO_DURO }}</td>
+                    <td>{{ $inventario->RAM }}</td>
+                    <td>{{ $inventario->OBSERVACIONES }}</td>
+                    <td>{{ $inventario->SERVICE_TAG }}</td>
+                    <td>
+                        @if($inventario->ESTADO_ACTUAL == 1)
+                            ACTIVO
+                        @elseif($inventario->ESTADO_ACTUAL == 0)
+                            INACTIVO
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-azul-cielo btn-sm mx-auto" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="delete btn btn-warning btn-sm mx-auto" 
+                            data-inventario-id="{{ $inventario->ID_EQUIPO }}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
             <div class="d-flex justify-content-center">
             {{ $inventarios->links('pagination::bootstrap-4') }}
 </div>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const table = document.getElementById("inventarioTable");
+        const tbody = table.getElementsByTagName("tbody")[0];
+        const rows = tbody.getElementsByTagName("tr");
+        const totalRegistros = document.getElementById("totalRegistros");
+
+        searchInput.addEventListener("keyup", function () {
+            let searchText = searchInput.value.toLowerCase();
+            let count = 0;
+
+            for (let row of rows) {
+                let text = row.innerText.toLowerCase();
+                if (text.includes(searchText)) {
+                    row.style.display = "";
+                    count++;
+                } else {
+                    row.style.display = "none";
+                }
+            }
+
+            totalRegistros.innerText = count; 
+        });
+    });
+</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
