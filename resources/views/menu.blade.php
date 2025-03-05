@@ -128,18 +128,31 @@
                 <div class="btn-hamburger"></div>
             </div>
         </div>
-        
-
+        <div id="menu-items">
+            <div class="item">
+                <a href="/dashboard">
+                    <div class="icon"><img src="images/inicio.svg" alt=""></div>
+                    <div class="title"><span>INICIO</span></div>
+                </a>
+            </div>
+            <div id="menu-items">
+            <div class="item">
+                <a href="/inventario">
+                    <div class="icon"><img src="images/inventario.svg" alt=""></div>
+                    <div class="title"><span>INVENTARIO</span></div>
+                </a>
+            </div>
             <div class="item">
                 <a href="#" onclick="confirmLogout()">
                     <div class="icon"><img src="images/logout.svg" alt="Cerrar Sesión"></div>
-                    <div class="title"><span><font color="black">CERRAR SESIÓN</font></span></div>
+                    <div class="title"><span>CERRAR SESIÓN</font></span></div>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Contenido dinámico -->
