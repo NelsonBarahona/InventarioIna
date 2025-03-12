@@ -194,17 +194,17 @@
     <div class="container">
         
         <!-- Contenedor de búsqueda y botones -->
-        <form method="GET" action="{{ route('inventarios.index') }}" id="searchForm">
+        <form method="GET" action="{{ route('inventario') }}" id="searchForm">
     <div class="search-container">
-        <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" style="max-width: 300px; width: 100%;">
-        
+        <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" style="max-width: 300px; width: 100%;"> 
         <div class="button-container d-flex gap-2">
             <button type="submit" class="btn btn-azul-cielo"><strong>Buscar</strong></button>
             <button type="button" class="btn btn-azul-cielo" data-bs-toggle="modal" data-bs-target="#registerModal"><strong>Agregar</strong></button>
             <button class="btn btn-warning" id="generarReporte"><strong>Generar Reporte</strong></button>
         </div>
-    </div>
+    </div>  
 </form>
+
 @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
-    use HasFactory;
+    use Notifiable;
 
-    protected $table = 'TBL_USUARIOS';
+    protected $table = 'tbl_usuarios'; // 🔥 Especifica el nombre correcto de la tabla
 
     protected $primaryKey = 'ID_USUARIO';
 
@@ -22,22 +21,12 @@ class Usuario extends Model
         'COD_ESTADO'
     ];
 
-    public $timestamps = false;
-/*
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'FK_COD_ROL');
-    }
+    protected $hidden = [
+        'CONTRASENA',
+    ];
 
-    public function estado()
+    public function getAuthPassword()
     {
-        return $this->belongsTo(Estado::class, 'COD_ESTADO');
-      }
-*/
-
-      public function usuario()
-    {
-        return $this->belongsTo(usuario::class, 'CONTRASENA');
+        return $this->CONTRASENA; // 🔥 Laravel usará este campo como la contraseña
     }
 }
-

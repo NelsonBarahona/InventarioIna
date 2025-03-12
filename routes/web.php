@@ -14,7 +14,10 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 // Ruta para procesar el inicio de sesión
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/inventario', [InventarioController::class, 'index'])->name('inventarios.index');
+// Rutas protegidas con autenticación
+Route::middleware('auth')->group(function () {
+    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario');
+});
 
 // Ruta para cerrar sesión
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

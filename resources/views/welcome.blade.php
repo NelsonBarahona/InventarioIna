@@ -55,7 +55,6 @@
     object-fit: contain;
 }
 
-
     </style>
 <body>
 <section class="slider_section position-relative">
@@ -68,7 +67,6 @@
                             <div class="slider_detail-box">
                                 <h1 class="text-warning fw-bold">Instituto Nacional Agrario</h1>
                                 <h2 style="color: #A2D9CE;" class="fs-4"><strong>Departamento de Informática</strong></h2>
-
                                 <p>
                                     <font color="white">
                                         <strong>Inventario de equipos de computo contabilizados en la Institucion.</strong>
