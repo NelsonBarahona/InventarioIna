@@ -40,4 +40,49 @@ class InventarioController extends Controller
 
         return view('inventario', compact('inventarios'));
     }
+
+    
+    public function agregar(Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
+        'tipoequipo' => 'required|string|max:255',
+        'marcamodelo' => 'nullable|string|max:255', // No es obligatorio
+        'ficha' => 'nullable|string|max:255', // No es obligatorio
+        'inventario' => 'nullable|string|max:255', // No es obligatorio
+        'oficina' => 'nullable|string|max:255', // No es obligatorio
+        'estado' => 'nullable|string|max:255', // No es obligatorio
+        'discoduro' => 'nullable|string|max:255', // No es obligatorio
+        'ram' => 'nullable|string|max:255', // No es obligatorio
+        'observaciones' => 'nullable|string|max:255', // No es obligatorio
+        'servicetag' => 'nullable|string|max:255', // No es obligatorio
+        ]);
+      
+        // Crear una nueva instancia del modelo Inventario
+        $inventarios = new Inventario();
+    
+        // Asignar valores a los campos, convirtiendo los valores nulos a vacíos
+    $inventarios->TIPO_EQUIPO = $request->tipoequipo ?? ''; // Si es nulo, se asigna una cadena vacía
+    $inventarios->MARCA_MODELO = $request->marcamodelo ?? '';
+    $inventarios->FICHA = $request->ficha ?? '';
+    $inventarios->INVENTARIO = $request->inventario ?? '';
+    $inventarios->OFICINA = $request->oficina ?? '';
+    $inventarios->ESTADO = $request->estado ?? '';
+    $inventarios->DISCO_DURO = $request->discoduro ?? '';
+    $inventarios->RAM = $request->ram ?? '';
+    $inventarios->OBSERVACIONES = $request->observaciones ?? '';
+    $inventarios->SERVICE_TAG = $request->servicetag ?? '';
+    $inventarios->ESTADO_ACTUAL = 1; // Si deseas establecer un estado por defecto
+
+    
+        // Guardar la nueva entrada en la base de datos
+        $inventarios->save();
+        
+         // Usar flash para pasar el mensaje
+    session()->flash('swal_message', 'El equipo ha sido agregado exitosamente.');
+    
+          // Redirigir sin pasar mensaje tradicional, solo con SweetAlert
+    return redirect()->route('inventario.agregar');
+    }
+    
 }

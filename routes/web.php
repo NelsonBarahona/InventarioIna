@@ -19,5 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario');
 });
 
+Route::post('/inventario', [InventarioController::class, 'agregar'])->name('inventario.agregar');
 // Ruta para cerrar sesión
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

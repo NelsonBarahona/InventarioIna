@@ -36,7 +36,7 @@ public function logout(Request $request)
 {
     Auth::logout();
     $request->session()->invalidate();
-    $request->session()->regenerateToken(); // Regenera el token de sesión por seguridad
+    $request->session()->regenerateToken(); 
 
     return redirect()->route('login');
 }
@@ -48,6 +48,5 @@ public function inventario(Request $request)
     }
 
     return redirect()->route('login');
-}
-   
+}  
 }

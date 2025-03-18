@@ -198,5 +198,22 @@
             document.querySelector('#sidebar').classList.toggle("collapsed");
         });
     </script>
+    @if (session('swal_message'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            title: '¡Éxito!',
+            text: '{{ session('swal_message') }}',
+            icon: 'success',
+            confirmButtonColor: '#87CEEB',
+            confirmButtonText: 'Aceptar',
+            didOpen: () => {
+                document.querySelector('.swal2-confirm').style.color = 'black';
+                document.querySelector('.swal2-confirm').style.fontWeight = 'bold';
+            }
+        });
+    </script>
+@endif
+
 </body>
 </html>

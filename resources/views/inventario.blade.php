@@ -209,7 +209,7 @@
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    <li>{{$error }}</li>
                 @endforeach
             </ul>
         </div>
@@ -284,9 +284,68 @@
 {{ $inventarios->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
 
 </div>
+</div> 
 </div>
-        </div>
     </div>
+     <!-- Modal para agregar un nuevo equipo -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header" style="background-color: #87CEEB; color: white;">
+            <h5 class="modal-title" id="registerModalLabel" style="color: black;"><strong>Agregar Equipo</strong></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="background-color: white; color: black;">
+                <form id="registerForm" method="POST" action="{{ route('inventario.agregar') }}">
+    @csrf
+                    <xbr>
+                        <div class="form-group">
+                            <label for="tipoequipo">Tipo de Equipo:</label>
+                            <input type="text" class="form-control" id="tipoequipo" name="tipoequipo"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="marcamodelo">Marca/Modelo:</label>
+                            <input type="text" class="form-control" id="marcamodelo" name="marcamodelo"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="ficha">Ficha:</label>
+                            <input type="text" class="form-control" id="ficha" name="ficha"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventario">Inventario:</label>
+                            <input type="text" class="form-control" id="inventario" name="inventario"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="oficina">Oficina:</label>
+                            <input type="text" class="form-control" id="oficina" name="oficina"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="estado">Estado:</label>
+                            <input type="text" class="form-control" id="estado" name="estado"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="discoduro">Disco Duro:</label>
+                            <input type="text" class="form-control" id="discoduro" name="discoduro"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="ram">Ram:</label>
+                            <input type="text" class="form-control" id="ram" name="ram"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones">Observaciones:</label>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="servicetag">Service Tag:</label>
+                            <input type="text" class="form-control" id="servicetag" name="servicetag"><br>
+                        </div>
+                        <button type="submit" class="btn btn-azul-cielo"><strong>Guardar</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+        </div>
     <script>
     // Detectar cuando el campo de búsqueda está vacío
     document.getElementById('search').addEventListener('input', function() {
@@ -300,7 +359,8 @@
     });
 </script>
 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-@endsection
+@endsection 
