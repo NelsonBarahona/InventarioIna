@@ -20,5 +20,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/inventario', [InventarioController::class, 'agregar'])->name('inventario.agregar');
+Route::put('/inventario/{id}', [InventarioController::class, 'actualizar'])->name('inventario.actualizar');
+Route::put('/inventario/inactivar/{id}', [InventarioController::class, 'inactivar']);
 // Ruta para cerrar sesión
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

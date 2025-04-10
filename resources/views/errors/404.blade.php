@@ -25,7 +25,6 @@ body {
     <h1 style="font-size: 3em;">¡Vaya!</h1>
     <p style="font-size: 1.5em;">No se puede encontrar esa página.</p>
     <div class="form-group">
-    <a button type="submit" class="btn btn-primary" href="{{url('/login')}}"><strong>Ir al login</strong></a>
     <div class="col-md-4 offset-md-1">
     <div class="slider_img-box">
     <br>

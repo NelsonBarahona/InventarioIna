@@ -5,6 +5,7 @@
 @section('content')
 <head>  
 <meta charset="UTF-8">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
@@ -192,7 +193,6 @@
 <div style="margin-left: -250px;">
 <h1><strong>Inventario de Equipos de Cómputo</strong></h1>
     <div class="container">
-        
         <!-- Contenedor de búsqueda y botones -->
         <form method="GET" action="{{ route('inventario') }}" id="searchForm">
     <div class="search-container">
@@ -224,6 +224,13 @@
       <!-- Mostrar resultados de búsqueda -->
 <div class="d-flex justify-content-center my-3">
     <strong><h5>Mostrando {{ $inventarios->firstItem() }}–{{ $inventarios->lastItem() }} de {{ $inventarios->total() }} resultados</strong></h5>
+</div>
+<div class="d-flex justify-content-between align-items-center">
+    <label for="sortOrder"><strong>Ordenar por:</strong></label>
+    <select id="sortOrder" class="form-control" style="max-width: 200px;">
+        <option value="desc">Más recientes</option>
+        <option value="asc">Más antiguos</option>
+    </select>
 </div>
 <table class="table table-bordered border-primary" id="inventarioTable">
     <thead class="table-primary">
@@ -282,6 +289,7 @@
 
 <div class="d-flex justify-content-center">
 {{ $inventarios->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+
 
 </div>
 </div> 
@@ -346,21 +354,159 @@
         </div>
         </div>
         </div>
-    <script>
-    // Detectar cuando el campo de búsqueda está vacío
-    document.getElementById('search').addEventListener('input', function() {
-        var searchValue = this.value;
+        @foreach($inventarios as $inventario)
+<div class="modal fade" id="editarModal{{ $inventario->ID_EQUIPO }}" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header" style="background-color: #87CEEB; color: black;">
+            <h5 class="modal-title" id="registerModalLabel" style="color: black;"><strong>Editar Equipo</strong></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="background-color: white; color: black;">
+                <form id="editarForm{{ $inventario->ID_EQUIPO }}" action="{{ route('inventario.actualizar', ['id' => $inventario->ID_EQUIPO]) }}" method="POST">
+                    @csrf
+                    <xbr>
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="tipoEquipo" class="form-label">Tipo de Equipo</label>
+                        <input type="text" value="{{ $inventario->tipo_equipo }}" class="form-control text-dark" id="tipoEquipo" name="tipoEquipo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="MarcaModelo" class="form-label">Marca/Modelo</label>
+                        <input type="text" value="{{ $inventario->Marca_Modelo }}" class="form-control text-dark" id="MarcaModelo" name="MarcaModelo">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ficha" class="form-label">Ficha:</label>
+                        <input type="text" value="{{ $inventario->ficha }}" class="form-control text-dark" id="ficha" name="ficha">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inventario" class="form-label">Inventario:</label>
+                        <input type="text" value="{{ $inventario->inventario }}" class="form-control text-dark" id="inventario" name="inventario">
+                    </div>
+                    <div class="mb-3">
+                        <label for="oficina" class="form-label">Oficina:</label>
+                        <input type="text" value="{{ $inventario->oficina }}" class="form-control text-dark" id="oficina" name="oficina">
+                    </div>
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado:</label>
+                        <input type="text" value="{{ $inventario->estado }}" class="form-control text-dark" id="estado" name="estado" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="discoduro" class="form-label">Disco Duro:</label>
+                        <input type="text" value="{{ $inventario->Disco_duro }}" class="form-control text-dark" id="discoduro" name="discoduro">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ram" class="form-label">Ram:</label>
+                        <input type="text" value="{{ $inventario->ram }}" class="form-control text-dark" id="ram" name="ram">
+                    </div>
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones:</label>
+                        <input type="text" value="{{ $inventario->observaciones }}" class="form-control text-dark" id="observaciones" name="observaciones">
+                    </div>
+                    <div class="mb-3">
+                        <label for="servicetag" class="form-label">Service Tag:</label>
+                        <input type="text" value="{{ $inventario->service_tag }}" class="form-control text-dark" id="servicetag" name="servicetag" >
+                    </div>
+                    <button type="submit" class="btn btn-azul-cielo"><strong>Modificar</strong></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+<script>
+    document.getElementById('ordenar').addEventListener('change', function() {
+        const orden = this.value;
+        const search = document.getElementById('search')?.value || '';
+        const baseUrl = window.location.href.split('?')[0];
 
-        // Si el campo está vacío, redirigir a la primera página
-        if (searchValue === '') {
-            var currentUrl = window.location.href.split('?')[0]; // Obtener la URL sin parámetros
-            window.location.href = currentUrl + '?page=1'; // Redirigir a la primera página
+        // Construye la nueva URL con parámetros
+        let nuevaUrl = `${baseUrl}?`;
+
+        if (search !== '') {
+            nuevaUrl += `search=${encodeURIComponent(search)}&`;
         }
+
+        if (orden !== '') {
+            nuevaUrl += `orden=${orden}&`;
+        }
+
+        window.location.href = nuevaUrl.slice(0, -1); // Elimina el último "&"
+    });
+</script>
+
+
+<script>
+    document.querySelectorAll('.delete').forEach(button => {
+        button.addEventListener('click', function() {
+            const inventarioId = this.getAttribute('data-inventario-id');
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Seguro que deseas inactivar este Equipo',
+                imageUrl: 'images/logo.png',
+                imageWidth: 100, 
+                imageHeight: 100, 
+                imageAlt: 'Logo', 
+                showCancelButton: true,
+                confirmButtonColor: '#007bff', // Color azul
+                confirmButtonText: 'Aceptar',
+                cancelButtonColor: '#ffc107', // Color amarillo
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/inventario/inactivar/${inventarioId}`, {
+    method: 'PUT',
+    headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({}) // importante si usas PUT
+})
+
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('La solicitud de inactivacion del Equipo falló');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Éxito!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Advertencia!',
+                                text: data.message,
+                                icon: 'warning',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Ocurrió un error al intentar inactivar el Equipo',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    });
+                }
+            });
+        });
     });
 </script>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 @endsection 

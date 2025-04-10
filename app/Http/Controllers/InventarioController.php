@@ -46,7 +46,7 @@ class InventarioController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-        'tipoequipo' => 'required|string|max:255',
+        'tipoequipo' => 'nullable|string|max:255',
         'marcamodelo' => 'nullable|string|max:255', // No es obligatorio
         'ficha' => 'nullable|string|max:255', // No es obligatorio
         'inventario' => 'nullable|string|max:255', // No es obligatorio
@@ -84,5 +84,67 @@ class InventarioController extends Controller
           // Redirigir sin pasar mensaje tradicional, solo con SweetAlert
     return redirect()->route('inventario.agregar');
     }
-    
+    public function actualizar(Request $request, $id)
+    {
+        // Valida los datos de la solicitud
+        $request->validate([
+            'tipoEquipo' => 'nullable|string|max:255',
+        'MarcaModelo' => 'nullable|string|max:255', // No es obligatorio
+        'ficha' => 'nullable|string|max:255', // No es obligatorio
+        'inventario' => 'nullable|string|max:255', // No es obligatorio
+        'oficina' => 'nullable|string|max:255', // No es obligatorio
+        'estado' => 'nullable|string|max:255', // No es obligatorio
+        'discoduro' => 'nullable|string|max:255', // No es obligatorio
+        'ram' => 'nullable|string|max:255', // No es obligatorio
+        'observaciones' => 'nullable|string|max:255', // No es obligatorio
+        'servicetag' => 'nullable|string|max:255', // No es obligatorio
+
+        ]);
+
+        try {
+            // Encuentra la carrera por su ID
+            $inventarios = Inventario::findOrFail($id);
+
+            // Actualiza el nombre de la carrera con el nuevo valor proporcionado en la solicitud
+            $inventarios->TIPO_EQUIPO = $request->tipoEquipo ?? '';
+            $inventarios->MARCA_MODELO = $request->MarcaModelo ?? '';
+            $inventarios->FICHA = $request->ficha ?? '';
+            $inventarios->INVENTARIO = $request->inventario ?? '';
+            $inventarios->OFICINA = $request->oficina ?? '';
+            $inventarios->ESTADO = $request->estado ?? '';
+            $inventarios->DISCO_DURO = $request->discoduro ?? '';
+            $inventarios->RAM = $request->ram ?? '';
+            $inventarios->OBSERVACIONES = $request->observaciones ?? '';
+            $inventarios->SERVICE_TAG = $request->servicetag ?? '';
+            // Guarda los cambios en la base de datos
+            $inventarios->save();
+
+           // Aquí está la línea clave para el SweetAlert
+        session()->flash('swal_message', 'El equipo ha sido actualizado exitosamente.');
+
+        return redirect()->back(); // Puedes cambiar la redirección según convenga
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Ocurrió un error al actualizar el equipo');
+    }
 }
+public function inactivar(request $request, $id)
+{
+   
+    try {
+        $inventarios = Inventario::findOrFail($id);
+        $inventarios->ESTADO_ACTUAL = 0;
+        $inventarios->save();
+
+        // Retorna una respuesta de éxito
+        return response()->json(['success' => true, 'message' => 'El equipo ha sido inactivado exitosamente']);
+    } catch (\Exception $e) {
+        // Si ocurre algún error, maneja la excepción y retorna una respuesta de error en formato JSON
+        return response()->json(['success' => false, 'message' => 'Ocurrió un error al inactivar el Equipo']);
+    }
+}
+}
+
+
+
+
+
