@@ -17,6 +17,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <style> 
     /* Estilos Generales */
     body {
@@ -141,6 +144,7 @@
         .button-container button {
             width: 100%;
         }
+        
 
         .search-container {
             flex-direction: column; /* Los elementos de búsqueda se apilan */
@@ -200,7 +204,11 @@
         <div class="button-container d-flex gap-2">
             <button type="submit" class="btn btn-azul-cielo"><strong>Buscar</strong></button>
             <button type="button" class="btn btn-azul-cielo" data-bs-toggle="modal" data-bs-target="#registerModal"><strong>Agregar</strong></button>
-            <button class="btn btn-warning" id="generarReporte"><strong>Generar Reporte</strong></button>
+            <button type="button" class="btn btn-warning" id="generarReporte"><strong>Generar Reporte Filtrado</strong></button>
+            <a href="{{ route('inventario.reporte') }}" target="_blank" class="btn btn-warning fw-bold">
+    Generar Reporte Completo
+</a>
+
         </div>
     </div>  
 </form>
@@ -232,7 +240,9 @@
         <option value="asc">Más antiguos</option>
     </select>
 </div>
-<table class="table table-bordered border-primary" id="inventarioTable">
+<table class="table table-bordered table-hover" id="inventarioTable">
+    
+
     <thead class="table-primary">
         <tr>
             <th>Código</th>
@@ -277,6 +287,8 @@
                         data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
+                    <br>
+                    <br>
                     <button class="delete btn btn-warning btn-sm mx-auto" 
                         data-inventario-id="{{ $inventario->ID_EQUIPO }}">
                         <i class="fa-solid fa-trash"></i>
@@ -407,7 +419,7 @@
                         <label for="servicetag" class="form-label">Service Tag:</label>
                         <input type="text" value="{{ $inventario->service_tag }}" class="form-control text-dark" id="servicetag" name="servicetag" >
                     </div>
-                    <button type="submit" class="btn btn-azul-cielo"><strong>Modificar</strong></button>
+                    <button type="submit" class="btn btn-azul-cielo"><strong>Guardar cambios</strong></button>
                     </div>
                 </form>
             </div>
@@ -504,6 +516,91 @@
         });
     });
 </script>
+<script>
+    $('#generarReporte').click(function () {
+        var table = $('#inventarioTable').DataTable();
+        var data = table.rows({ search: 'applied' }).data(); // <-- Todos los resultados filtrados, sin importar la página
+
+        var tbodyContent = '';
+
+        for (var i = 0; i < data.length; i++) {
+            var row = data[i];
+            tbodyContent += `<tr>
+                <td>${row[1]}</td>
+                <td>${row[2]}</td>
+                <td>${row[3]}</td>
+                <td>${row[4]}</td>
+                <td>${row[5]}</td>
+                <td>${row[6]}</td>
+                <td>${row[7]}</td>
+                <td>${row[8]}</td>
+                <td>${row[9]}</td>
+                <td>${row[10]}</td>
+                <td>${row[11]}</td>
+            </tr>`;
+        }
+
+        var contenido = `
+        <html>
+            <head>
+                <title>INSTITUTO NACIONAL AGRARIO</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    h1 { text-align: center; margin-top: 10px; }
+                    .container { padding: 30px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 2px solid #ddd; padding: 5px; text-align: left; }
+                    th { background-color: #4e9ce4; color: white; }
+                    tr:hover { background-color: #f2f2f2; }
+                    .logo { text-align: right; margin-bottom: 5px; }
+                    .logo img { max-width: 120px; }
+                </style>
+            </head>
+            <body>
+                <div class="logo">
+                    <img src="images/logo.png" alt="Logo">
+                </div>
+                <h1>Listado de Equipos</h1>
+                <div class="container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Equipo</th>
+                                <th>Marca/Modelo</th>
+                                <th>Ficha</th>
+                                <th>Inventario</th>
+                                <th>Oficina</th>
+                                <th>Estado</th>
+                                <th>Disco Duro</th>
+                                <th>Ram</th>
+                                <th>Observaciones</th>
+                                <th>Service Tag</th>
+                                <th>Estado Actual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tbodyContent}
+                        </tbody>
+                    </table>
+                </div>
+            </body>
+        </html>`;
+
+        var temporalDocument = document.createElement('iframe');
+        temporalDocument.setAttribute('style', 'visibility:hidden;position:absolute;width:0;height:0;');
+        document.body.appendChild(temporalDocument);
+        temporalDocument.contentWindow.document.open();
+        temporalDocument.contentWindow.document.write(contenido);
+        temporalDocument.contentWindow.document.close();
+
+        setTimeout(() => {
+            temporalDocument.contentWindow.focus();
+            temporalDocument.contentWindow.print();
+            document.body.removeChild(temporalDocument);
+        }, 1000);
+    });
+</script>
+
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

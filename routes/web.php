@@ -22,5 +22,15 @@ Route::middleware('auth')->group(function () {
 Route::post('/inventario', [InventarioController::class, 'agregar'])->name('inventario.agregar');
 Route::put('/inventario/{id}', [InventarioController::class, 'actualizar'])->name('inventario.actualizar');
 Route::put('/inventario/inactivar/{id}', [InventarioController::class, 'inactivar']);
+Route::get('/exportar-inventario-excel', [InventarioController::class, 'exportarExcel'])->name('exportar-excel-inventario');
+
+
+
+Route::get('/reporte-inventario', [InventarioController::class, 'reporteCompleto'])->name('inventario.reporte');
+
+
+
+
+
 // Ruta para cerrar sesión
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InventarioExport;
 
 class InventarioController extends Controller
 {
@@ -142,6 +144,13 @@ public function inactivar(request $request, $id)
         return response()->json(['success' => false, 'message' => 'Ocurrió un error al inactivar el Equipo']);
     }
 }
+public function reporteCompleto()
+{
+    $inventarios = Inventario::all(); // Todos los registros sin paginar
+    return view('inventario_reporte', compact('inventarios'));
+}
+
+
 }
 
 
