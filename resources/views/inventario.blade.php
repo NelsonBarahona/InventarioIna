@@ -103,25 +103,22 @@
     }
 
     table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-        text-align: center;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;  /* Cambiar de fixed a auto */
+}
 
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    word-wrap: break-word;
+    text-align: center;
+}
     .table-primary {
         background-color: #87CEEB !important; 
         border-color: #87CEEB;
     }
 
-    table, th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        word-wrap: break-word;
-        max-width: 150px;
-    }
 
     /* Estilos del Modal */
     .modal-dialog {
@@ -204,7 +201,6 @@
         <div class="button-container d-flex gap-2">
             <button type="submit" class="btn btn-azul-cielo"><strong>Buscar</strong></button>
             <button type="button" class="btn btn-azul-cielo" data-bs-toggle="modal" data-bs-target="#registerModal"><strong>Agregar</strong></button>
-            <button type="button" class="btn btn-warning" id="generarReporte"><strong>Generar Reporte Filtrado</strong></button>
             <a href="{{ route('inventario.reporte') }}" target="_blank" class="btn btn-warning fw-bold">
     Generar Reporte Completo
 </a>
@@ -233,19 +229,13 @@
 <div class="d-flex justify-content-center my-3">
     <strong><h5>Mostrando {{ $inventarios->firstItem() }}–{{ $inventarios->lastItem() }} de {{ $inventarios->total() }} resultados</strong></h5>
 </div>
-<div class="d-flex justify-content-between align-items-center">
-    <label for="sortOrder"><strong>Ordenar por:</strong></label>
-    <select id="sortOrder" class="form-control" style="max-width: 200px;">
-        <option value="desc">Más recientes</option>
-        <option value="asc">Más antiguos</option>
-    </select>
-</div>
+
 <table class="table table-bordered table-hover" id="inventarioTable">
     
 
     <thead class="table-primary">
         <tr>
-            <th>Código</th>
+            <th hidden>Código</th>
             <th>Tipo</th>
             <th>Marca/Modelo</th>
             <th>Ficha</th>
@@ -263,7 +253,7 @@
     <tbody>
         @foreach($inventarios as $inventario)
             <tr>
-                <td>{{ $inventario->ID_EQUIPO }}</td>
+                <td hidden>{{ $inventario->ID_EQUIPO }}</td>
                 <td>{{ $inventario->TIPO_EQUIPO }}</td>
                 <td>{{ $inventario->MARCA_MODELO }}</td>
                 <td>{{ $inventario->FICHA }}</td>
@@ -282,11 +272,11 @@
                     @endif
                 </td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-azul-cielo btn-sm mx-auto" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
+    <button type="button" class="btn btn-azul-cielo btn-sm mx-auto" 
+        data-bs-toggle="modal" 
+        data-bs-target="#editarModal{{ $inventario->ID_EQUIPO }}">
+        <i class="fas fa-search"></i> <!-- Cambié fa-pencil-alt por fa-search -->
+    </button>
                     <br>
                     <br>
                     <button class="delete btn btn-warning btn-sm mx-auto" 
@@ -321,43 +311,43 @@
                     <xbr>
                         <div class="form-group">
                             <label for="tipoequipo">Tipo de Equipo:</label>
-                            <input type="text" class="form-control" id="tipoequipo" name="tipoequipo"><br>
+                            <input type="text" class="form-control" id="tipoequipo" name="tipoequipo"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="marcamodelo">Marca/Modelo:</label>
-                            <input type="text" class="form-control" id="marcamodelo" name="marcamodelo"><br>
+                            <input type="text" class="form-control" id="marcamodelo" name="marcamodelo"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="ficha">Ficha:</label>
-                            <input type="text" class="form-control" id="ficha" name="ficha"><br>
+                            <input type="text" class="form-control" id="ficha" name="ficha"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="inventario">Inventario:</label>
-                            <input type="text" class="form-control" id="inventario" name="inventario"><br>
+                            <input type="text" class="form-control" id="inventario" name="inventario"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="oficina">Oficina:</label>
-                            <input type="text" class="form-control" id="oficina" name="oficina"><br>
+                            <input type="text" class="form-control" id="oficina" name="oficina"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="estado">Estado:</label>
-                            <input type="text" class="form-control" id="estado" name="estado"><br>
+                            <input type="text" class="form-control" id="estado" name="estado"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="discoduro">Disco Duro:</label>
-                            <input type="text" class="form-control" id="discoduro" name="discoduro"><br>
+                            <input type="text" class="form-control" id="discoduro" name="discoduro"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="ram">Ram:</label>
-                            <input type="text" class="form-control" id="ram" name="ram"><br>
+                            <input type="text" class="form-control" id="ram" name="ram"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="observaciones">Observaciones:</label>
-                            <input type="text" class="form-control" id="observaciones" name="observaciones"><br>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones"required oninput="validateInput(this)" ><br>
                         </div>
                         <div class="form-group">
                             <label for="servicetag">Service Tag:</label>
-                            <input type="text" class="form-control" id="servicetag" name="servicetag"><br>
+                            <input type="text" class="form-control" id="servicetag" name="servicetag"required oninput="validateInput(this)" ><br>
                         </div>
                         <button type="submit" class="btn btn-azul-cielo"><strong>Guardar</strong></button>
                     </div>
@@ -366,60 +356,83 @@
         </div>
         </div>
         </div>
-        @foreach($inventarios as $inventario)
-<div class="modal fade" id="editarModal{{ $inventario->ID_EQUIPO }}" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header" style="background-color: #87CEEB; color: black;">
-            <h5 class="modal-title" id="registerModalLabel" style="color: black;"><strong>Editar Equipo</strong></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" style="background-color: white; color: black;">
-                <form id="editarForm{{ $inventario->ID_EQUIPO }}" action="{{ route('inventario.actualizar', ['id' => $inventario->ID_EQUIPO]) }}" method="POST">
-                    @csrf
-                    <xbr>
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="tipoEquipo" class="form-label">Tipo de Equipo</label>
-                        <input type="text" value="{{ $inventario->tipo_equipo }}" class="form-control text-dark" id="tipoEquipo" name="tipoEquipo">
-                    </div>
-                    <div class="mb-3">
-                        <label for="MarcaModelo" class="form-label">Marca/Modelo</label>
-                        <input type="text" value="{{ $inventario->Marca_Modelo }}" class="form-control text-dark" id="MarcaModelo" name="MarcaModelo">
-                    </div>
-                    <div class="mb-3">
-                        <label for="ficha" class="form-label">Ficha:</label>
-                        <input type="text" value="{{ $inventario->ficha }}" class="form-control text-dark" id="ficha" name="ficha">
-                    </div>
-                    <div class="mb-3">
-                        <label for="inventario" class="form-label">Inventario:</label>
-                        <input type="text" value="{{ $inventario->inventario }}" class="form-control text-dark" id="inventario" name="inventario">
-                    </div>
-                    <div class="mb-3">
-                        <label for="oficina" class="form-label">Oficina:</label>
-                        <input type="text" value="{{ $inventario->oficina }}" class="form-control text-dark" id="oficina" name="oficina">
-                    </div>
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado:</label>
-                        <input type="text" value="{{ $inventario->estado }}" class="form-control text-dark" id="estado" name="estado" >
-                    </div>
-                    <div class="mb-3">
-                        <label for="discoduro" class="form-label">Disco Duro:</label>
-                        <input type="text" value="{{ $inventario->Disco_duro }}" class="form-control text-dark" id="discoduro" name="discoduro">
-                    </div>
-                    <div class="mb-3">
-                        <label for="ram" class="form-label">Ram:</label>
-                        <input type="text" value="{{ $inventario->ram }}" class="form-control text-dark" id="ram" name="ram">
-                    </div>
-                    <div class="mb-3">
-                        <label for="observaciones" class="form-label">Observaciones:</label>
-                        <input type="text" value="{{ $inventario->observaciones }}" class="form-control text-dark" id="observaciones" name="observaciones">
-                    </div>
-                    <div class="mb-3">
-                        <label for="servicetag" class="form-label">Service Tag:</label>
-                        <input type="text" value="{{ $inventario->service_tag }}" class="form-control text-dark" id="servicetag" name="servicetag" >
-                    </div>
-                    <button type="submit" class="btn btn-azul-cielo"><strong>Guardar cambios</strong></button>
+        @foreach ($inventarios as $inventario)
+    <!-- Modal con ID único por equipo -->
+    <div class="modal fade" id="editarModal{{ $inventario->ID_EQUIPO }}" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #87CEEB; color: black;">
+                    <h5 class="modal-title" id="editarModalLabel"><strong>Visualizacion de registros</strong></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarForm{{ $inventario->ID_EQUIPO }}" action="{{ route('inventario.actualizar', ['id' => $inventario->ID_EQUIPO]) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <!-- Campo solo de lectura, con valor enviado a través de un campo oculto -->
+                        <div class="mb-3">
+    <label class="form-label">Tipo de Equipo</label>
+    <input type="text" class="form-control text-dark" value="{{ $inventario->TIPO_EQUIPO }}" readonly>
+    <input type="hidden" name="TIPO_EQUIPO" value="{{ $inventario->TIPO_EQUIPO }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Marca/Modelo</label>
+    <input type="text" class="form-control text-dark" value="{{ $inventario->MARCA_MODELO }}" readonly>
+    <input type="hidden" name="MARCA_MODELO" value="{{ $inventario->MARCA_MODELO }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Ficha</label>
+    <input type="text" class="form-control text-dark" value="{{ $inventario->FICHA }}" readonly>
+    <input type="hidden" name="FICHA" value="{{ $inventario->FICHA }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Inventario</label>
+    <input type="text" class="form-control text-dark" value="{{ $inventario->INVENTARIO }}" readonly>
+    <input type="hidden" name="INVENTARIO" value="{{ $inventario->INVENTARIO }}">
+</div>
+
+<div class="mb-3">
+    <label for="oficina" class="form-label">Oficina:</label>
+    <input type="text" value="{{ $inventario->OFICINA }}" class="form-control text-dark" id="oficina" name="oficina" readonly>
+    <input type="hidden" name="OFICINA" value="{{ $inventario->OFICINA }}">
+</div>
+
+<div class="mb-3">
+    <label for="estado" class="form-label">Estado:</label>
+    <input type="text" value="{{ $inventario->ESTADO }}" class="form-control text-dark" id="estado" name="estado" readonly>
+    <input type="hidden" name="ESTADO" value="{{ $inventario->ESTADO }}">
+</div>
+
+<div class="mb-3">
+    <label for="discoduro" class="form-label">Disco Duro:</label>
+    <input type="text" value="{{ $inventario->DISCO_DURO }}" class="form-control text-dark" id="discoduro" name="discoduro" readonly>
+    <input type="hidden" name="DISCO_DURO" value="{{ $inventario->DISCO_DURO }}">
+</div>
+
+<div class="mb-3">
+    <label for="ram" class="form-label">Ram:</label>
+    <input type="text" value="{{ $inventario->RAM }}" class="form-control text-dark" id="ram" name="ram" readonly>
+    <input type="hidden" name="RAM" value="{{ $inventario->RAM }}">
+</div>
+
+<div class="mb-3">
+    <label for="observaciones" class="form-label">Observaciones:</label>
+    <input type="text" value="{{ $inventario->OBSERVACIONES }}" class="form-control text-dark" id="observaciones" name="observaciones" readonly>
+    <input type="hidden" name="OBSERVACIONES" value="{{ $inventario->OBSERVACIONES }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Service Tag</label>
+    <input type="text" class="form-control text-dark" value="{{ $inventario->SERVICE_TAG }}" readonly>
+    <input type="hidden" name="SERVICE_TAG" value="{{ $inventario->SERVICE_TAG }}">
+</div>
+
+
+                   
                     </div>
                 </form>
             </div>
@@ -448,6 +461,13 @@
     });
 </script>
 
+<script>
+function validateInput(input) {
+    // Convertir a mayúsculas
+    input.value = input.value.toUpperCase();
+
+    }
+</script>
 
 <script>
     document.querySelectorAll('.delete').forEach(button => {

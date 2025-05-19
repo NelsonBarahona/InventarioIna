@@ -28,6 +28,13 @@
         thead {
             background-color: #d1e7dd;
         }
+
+        /* Ocultar el botón cuando se imprima o genere el PDF */
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -37,13 +44,11 @@
     </div>
     <h2 style="text-align: center;">Listado Completo de Equipos</h2>
     <div style="text-align: center; margin-bottom: 20px;">
-    <button onclick="window.print()" style="padding: 8px 16px; margin-right: 10px;">🖨️ Imprimir</button>
-    <button onclick="exportToPDF()" style="padding: 8px 16px; margin-right: 10px;">📄 Guardar como PDF</button>
-</div>
+        <button class="no-print" onclick="window.print()" style="padding: 8px 16px; margin-right: 10px;">🖨️ Guardar como PDF o Imprimir </button>
+    </div>
     <table>
         <thead>
             <tr>
-                
                 <th>Tipo</th>
                 <th>Marca/Modelo</th>
                 <th>Ficha</th>
@@ -60,7 +65,6 @@
         <tbody>
             @foreach($inventarios as $inv)
                 <tr>
-                  
                     <td>{{ $inv->TIPO_EQUIPO }}</td>
                     <td>{{ $inv->MARCA_MODELO }}</td>
                     <td>{{ $inv->FICHA }}</td>
