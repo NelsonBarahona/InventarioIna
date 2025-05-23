@@ -28,6 +28,7 @@ class Inventario extends Model
         'OBSERVACIONES',
         'SERVICE_TAG',
         'ESTADO_ACTUAL',
+        'ARCHIVOS',
     ];
 
    

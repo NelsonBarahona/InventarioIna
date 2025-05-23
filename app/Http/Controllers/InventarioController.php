@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InventarioExport;
+use Illuminate\Support\Facades\Storage;
 
 class InventarioController extends Controller
 {
@@ -50,15 +51,20 @@ class InventarioController extends Controller
         $request->validate([
         'tipoequipo' => 'nullable|string|max:255',
         'marcamodelo' => 'nullable|string|max:255', // No es obligatorio
-        'ficha' => 'nullable|string|max:255', // No es obligatorio
-        'inventario' => 'nullable|string|max:255', // No es obligatorio
+        'ficha' => 'nullable|string|max:255|unique:tbl_equipos,FICHA', // No es obligatorio
+        'inventario' => 'nullable|string|max:255|unique:tbl_equipos,INVENTARIO', // No es obligatorio
         'oficina' => 'nullable|string|max:255', // No es obligatorio
         'estado' => 'nullable|string|max:255', // No es obligatorio
         'discoduro' => 'nullable|string|max:255', // No es obligatorio
         'ram' => 'nullable|string|max:255', // No es obligatorio
         'observaciones' => 'nullable|string|max:255', // No es obligatorio
-        'servicetag' => 'nullable|string|max:255', // No es obligatorio
-        ]);
+        'servicetag' => 'nullable|string|max:255|unique:tbl_equipos,SERVICE_TAG',
+], [
+    'servicetag.unique' => 'Serie registrada.',
+    'ficha.unique' => 'Ficha registrada.',
+    'inventario.unique' => 'Inventario registrado.',
+    
+]);
       
         // Crear una nueva instancia del modelo Inventario
         $inventarios = new Inventario();
@@ -86,49 +92,33 @@ class InventarioController extends Controller
           // Redirigir sin pasar mensaje tradicional, solo con SweetAlert
     return redirect()->route('inventario.agregar');
     }
-    public function actualizar(Request $request, $id)
-    {
-        // Valida los datos de la solicitud
-        $request->validate([
-            'tipoEquipo' => 'nullable|string|max:255',
-        'MarcaModelo' => 'nullable|string|max:255', // No es obligatorio
-        'ficha' => 'nullable|string|max:255', // No es obligatorio
-        'inventario' => 'nullable|string|max:255', // No es obligatorio
-        'oficina' => 'nullable|string|max:255', // No es obligatorio
-        'estado' => 'nullable|string|max:255', // No es obligatorio
-        'discoduro' => 'nullable|string|max:255', // No es obligatorio
-        'ram' => 'nullable|string|max:255', // No es obligatorio
-        'observaciones' => 'nullable|string|max:255', // No es obligatorio
-        'servicetag' => 'nullable|string|max:255', // No es obligatorio
+   public function actualizar(Request $request, $id)
+{
+    
+    $inventario = Inventario::findOrFail($id);
 
-        ]);
+    $request->validate([
+        'archivo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx|max:5048'
+    ]);
 
-        try {
-            // Encuentra la carrera por su ID
-            $inventarios = Inventario::findOrFail($id);
+    if ($request->hasFile('archivo')) {
+        $archivo = $request->file('archivo');
+        $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
 
-            // Actualiza el nombre de la carrera con el nuevo valor proporcionado en la solicitud
-            $inventarios->TIPO_EQUIPO = $request->tipoEquipo ?? '';
-            $inventarios->MARCA_MODELO = $request->MarcaModelo ?? '';
-            $inventarios->FICHA = $request->ficha ?? '';
-            $inventarios->INVENTARIO = $request->inventario ?? '';
-            $inventarios->OFICINA = $request->oficina ?? '';
-            $inventarios->ESTADO = $request->estado ?? '';
-            $inventarios->DISCO_DURO = $request->discoduro ?? '';
-            $inventarios->RAM = $request->ram ?? '';
-            $inventarios->OBSERVACIONES = $request->observaciones ?? '';
-            $inventarios->SERVICE_TAG = $request->servicetag ?? '';
-            // Guarda los cambios en la base de datos
-            $inventarios->save();
+        // Guardar archivo en storage/app/public/documentos
+        $rutaCarpetaStorage = storage_path('app/public/documentos');
+        $archivo->move($rutaCarpetaStorage, $nombreArchivo);
 
-           // Aquí está la línea clave para el SweetAlert
-        session()->flash('swal_message', 'El equipo ha sido actualizado exitosamente.');
-
-        return redirect()->back(); // Puedes cambiar la redirección según convenga
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Ocurrió un error al actualizar el equipo');
+        // Guardar la ruta relativa
+        $inventario->ARCHIVO = 'storage/documentos/' . $nombreArchivo;
     }
+
+    $inventario->save();
+
+    session()->flash('swal_message', 'El archivo se ha subido exitosamente');
+    return redirect()->back();
 }
+
 public function inactivar(request $request, $id)
 {
    
@@ -150,7 +140,50 @@ public function reporteCompleto()
     return view('inventario_reporte', compact('inventarios'));
 }
 
+public function subirArchivos($id)
+{
+    $inventario = Inventario::findOrFail($id);
+    return view('inventario.subir', compact('inventario'));
+}
+public function guardarArchivo(Request $request, $id)
+{
+    if ($request->hasFile('archivo')) {
+        $archivo = $request->file('archivo');
+        $nombre = time() . '_' . $archivo->getClientOriginalName();
+        $ruta = $archivo->storeAs('documentos_inventario', $nombre, 'public');
 
+        // Aquí podrías guardar la ruta en la base de datos si quieres
+        // Ejemplo: ArchivoInventario::create([...]);
+
+        return back()->with('success', 'Archivo subido exitosamente.');
+    }
+
+    return back()->with('error', 'No se pudo subir el archivo.');
+}
+
+public function borrarArchivo($id)
+{
+    $inventario = Inventario::findOrFail($id);
+
+    if ($inventario->ARCHIVO) {
+        // La ruta guardada es tipo 'storage/documentos/nombre.ext'
+        // La ruta para Storage disk 'public' es 'documentos/nombre.ext'
+        $rutaArchivo = str_replace('storage/', '', $inventario->ARCHIVO);
+
+        // Verificamos si el archivo existe y lo borramos
+        if (Storage::disk('public')->exists($rutaArchivo)) {
+            Storage::disk('public')->delete($rutaArchivo);
+        }
+
+        // Limpiamos el campo en la BD
+        $inventario->ARCHIVO = null;
+        $inventario->save();
+
+        return back()->with('success', 'Archivo eliminado correctamente.');
+    }
+
+    return back()->with('error', 'No hay archivo para eliminar.');
+}
 }
 
 

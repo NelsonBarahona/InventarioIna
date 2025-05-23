@@ -24,7 +24,8 @@ Route::put('/inventario/{id}', [InventarioController::class, 'actualizar'])->nam
 Route::put('/inventario/inactivar/{id}', [InventarioController::class, 'inactivar']);
 Route::get('/exportar-inventario-excel', [InventarioController::class, 'exportarExcel'])->name('exportar-excel-inventario');
 
-
+Route::post('/inventario/guardar-archivo/{id}', [InventarioController::class, 'guardarArchivo'])->name('inventario.guardarArchivos');
+Route::delete('/inventario/{id}/borrar-archivo', [InventarioController::class, 'borrarArchivo'])->name('inventario.borrarArchivo');
 
 Route::get('/reporte-inventario', [InventarioController::class, 'reporteCompleto'])->name('inventario.reporte');
 
