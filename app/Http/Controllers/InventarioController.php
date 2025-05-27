@@ -37,13 +37,18 @@ class InventarioController extends Controller
                   ->orWhere('SERVICE_TAG', 'LIKE', "%{$searchTerm}%");
             });
         }
-
-        // Obtener los inventarios con paginación
-        $inventarios = $query->paginate(10);
-
-        return view('inventario', compact('inventarios'));
+// Ordenar por ID_EQUIPO (mayor o menor)
+    if ($request->has('sort') && $request->sort == 'asc') {
+        $query->orderBy('ID_EQUIPO', 'asc'); // menor a mayor
+    } else {
+        $query->orderBy('ID_EQUIPO', 'desc'); // mayor a menor (por defecto)
     }
 
+    // Paginación
+    $inventarios = $query->paginate(10); // O el número que uses
+
+    return view('inventario', compact('inventarios'));
+}
     
     public function agregar(Request $request)
     {
@@ -60,9 +65,9 @@ class InventarioController extends Controller
         'observaciones' => 'nullable|string|max:255', // No es obligatorio
         'servicetag' => 'nullable|string|max:255|unique:tbl_equipos,SERVICE_TAG',
 ], [
-    'servicetag.unique' => 'Serie registrada.',
-    'ficha.unique' => 'Ficha registrada.',
-    'inventario.unique' => 'Inventario registrado.',
+    'servicetag.unique' => 'Este número de serie ya ha sido registrado en el sistema. Por favor, ingrese uno diferente.',
+    'ficha.unique' => 'Esta ficha ya está registrada. Por favor, verifique o ingrese una nueva.',
+    'inventario.unique' => 'Este número de inventario ya existe en el sistema. Ingrese un número distinto, por favor.',
     
 ]);
       

@@ -195,20 +195,32 @@ table, th, td {
 <div style="margin-left: -250px;">
 <h1><strong>Inventario de Equipos de Cómputo</strong></h1>
     <div class="container">
-        <!-- Contenedor de búsqueda y botones -->
-        <form method="GET" action="{{ route('inventario') }}" id="searchForm">
-    <div class="search-container">
-        <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" style="max-width: 300px; width: 100%;"> 
+       <!-- Contenedor de búsqueda y botones -->
+<form method="GET" action="{{ route('inventario') }}" id="searchForm">
+    <div class="search-container d-flex gap-2 align-items-start flex-wrap">
+
+        <div class="input-group" style="max-width: 300px;">
+            <input type="text" id="search" name="search" class="form-control" value="{{ request('search') }}" placeholder="Buscar" oninput="validateInput(this)">
+            @if(request()->has('search') && request('search') != '')
+            <br>
+                <a href="{{ route('inventario') }}" class="btn btn-warning">Revertir</a>
+            @endif
+        </div>
+
+        <select name="sort" class="form-control" onchange="this.form.submit()" style="max-width: 250px;">
+            <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Ordenar por los más recientes</option>
+            <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Ordenar por los más antiguos</option>
+        </select>
+
         <div class="button-container d-flex gap-2">
             <button type="submit" class="btn btn-azul-cielo"><strong>Buscar</strong></button>
             <button type="button" class="btn btn-azul-cielo" data-bs-toggle="modal" data-bs-target="#registerModal"><strong>Agregar</strong></button>
-            <a href="{{ route('inventario.reporte') }}" target="_blank" class="btn btn-warning fw-bold">
-    Generar Reporte Completo
-</a>
-
+            <a href="{{ route('inventario.reporte') }}" target="_blank" class="btn btn-warning fw-bold">Generar Reporte Completo</a>
         </div>
-    </div>  
+    </div>
 </form>
+
+
 
 @if ($errors->any())
         <div class="alert alert-danger">
@@ -233,8 +245,8 @@ table, th, td {
     <strong><h5>Mostrando {{ $inventarios->firstItem() }}–{{ $inventarios->lastItem() }} de {{ $inventarios->total() }} resultados</strong></h5>
 </div>
 
-<table class="table table-bordered table-hover" id="inventarioTable">
-    
+<div id="tabla-scroll" style="overflow-x: auto; white-space: nowrap;">
+    <table class="table table-bordered table-hover" id="inventarioTable" style="min-width: 1200px;">
 
     <thead class="table-primary">
         <tr>
@@ -250,7 +262,7 @@ table, th, td {
             <th>Observaciones</th>
             <th>No. Serie</th>
             <th>Estado Actual</th>
-            <th>Archivos</th>
+            <th>Soporte</th>
             <th class="text-center acciones-ajustadas">Acciones</th>
         </tr>
     </thead>
@@ -332,7 +344,8 @@ table, th, td {
 </table>
 
 <div class="d-flex justify-content-center">
-{{ $inventarios->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+{{ $inventarios->appends(request()->only(['search', 'sort']))->links('pagination::bootstrap-4') }}
+
 
 
 </div>
@@ -494,6 +507,17 @@ table, th, td {
 </div>
 @endforeach
 
+<script>
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Space' && !event.target.matches('input, textarea, select')) {
+            event.preventDefault(); // evitar que baje la página
+
+            const contenedor = document.getElementById('tabla-scroll');
+            // Mueve 100px hacia la derecha cada vez que se presiona la barra espaciadora
+            contenedor.scrollLeft += 100;
+        }
+    });
+</script>
 <script>
     document.getElementById('ordenar').addEventListener('change', function() {
         const orden = this.value;
