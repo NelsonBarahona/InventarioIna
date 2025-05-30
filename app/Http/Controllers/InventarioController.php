@@ -45,7 +45,7 @@ class InventarioController extends Controller
     }
 
     // Paginación
-    $inventarios = $query->paginate(10); // O el número que uses
+    $inventarios = $query->paginate(6); // O el número que uses
 
     return view('inventario', compact('inventarios'));
 }
